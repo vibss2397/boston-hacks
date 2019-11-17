@@ -16,6 +16,8 @@
 
 package com.bose.ar.basic_example;
 
+import java.io.IOException;
+
 /**
  * Receives sensor updates and alerts a StepListener when a step has been detected.
  */
@@ -43,7 +45,7 @@ public class SimpleStepDetector {
   /**
    * Accepts updates from the accelerometer.
    */
-  public void updateAccel(long timeNs, float x, float y, float z) {
+  public void updateAccel(long timeNs, float x, float y, float z) throws IOException {
     float[] currentAccel = new float[2];
     currentAccel[0] = x;
     currentAccel[1] = y;
