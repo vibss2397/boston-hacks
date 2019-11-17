@@ -7,7 +7,7 @@ package com.bose.ar.basic_example;
 //  Created by Tambet Ingo on 12/10/2018.
 //  Copyright © 2018 Bose Corporation. All rights reserved.
 //
-
+//, View.OnClickListener
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
@@ -44,6 +44,8 @@ import android.hardware.SensorManager;
 import java.io.IOException;
 import java.util.Locale;
 
+import android.widget.ImageView;
+
 import static android.content.Context.SENSOR_SERVICE;
 
 public class MainFragment extends Fragment implements SensorEventListener, StepListener{
@@ -59,12 +61,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private View mParentView;
     @Nullable
     private ProgressBar mProgressBar;
-    private TextView mPitch;
-    private TextView mRoll;
-    private TextView mYaw;
-    private TextView mX;
-    private TextView mY;
-    private TextView mZ;
+
 
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -78,11 +75,14 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public final float stride = 0.5f;
     public float quaternion_temp;
     public float[] coords = {0, 0};
+
+    private ImageView pic1, pic2, pic3, pic4;
+
     public locations[] locarr = new locations[4];
     public float DistThreshold = 10 ;
     public float maxvol = 35;
     public boolean songPlaying = false;
-
+    public TextView description;
     @Nullable
     private Snackbar mSnackBar;
 
@@ -90,9 +90,6 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         public float x;
         public float y;
         public String song;
-        public float ori;
-        public int id;
-
     }
 
     @Override
@@ -142,8 +139,20 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
+//        img.setOnClickListener(new OnClickListener() {
+//            //something
+//        });
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
+//    @Override
+//    public void onClick(View v) {
+//        Log.d("HELLO", "WORLD");
+//        if (v.getId() == R.id.pic4) {
+//            // Launching new Activity on hitting the image
+//            Intent j = new Intent(getActivity().getApplicationContext(), MainFragment.class);
+//            startActivity(j);
+//        }
+//    }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
@@ -151,13 +160,11 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
 
         mParentView = view.findViewById(R.id.container);
 
-        mPitch = view.findViewById(R.id.pitch);
-        mRoll = view.findViewById(R.id.roll);
-        mYaw = view.findViewById(R.id.yaw);
-
-        mX = view.findViewById(R.id.x);
-        mY = view.findViewById(R.id.y);
-        mZ = view.findViewById(R.id.z);
+        pic1 = view.findViewById(R.id.pic1);
+        pic2 = view.findViewById(R.id.pic2);
+        pic3 = view.findViewById(R.id.pic3);
+        pic4 = view.findViewById(R.id.pic4);
+        description = view.findViewById(R.id.description);
     }
 
     @Override
@@ -208,7 +215,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public void onResume() {
         super.onResume();
         numSteps = 0;
-        mZ.setText(TEXT_NUM_STEPS + numSteps);
+
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
@@ -364,7 +371,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         return (float) degrees;
     }
 
-    public float[] distanceCalculator(float yaw, int steps, float x1, float y1) {
+     public float[] distanceCalculator(float yaw, int steps, float x1, float y1) {
         float[] rtn = new float[2];
 
         float distance = stride * steps;
@@ -409,19 +416,51 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
 
     void playSong(String song,float volume) {
         Uri filename = Uri.parse("android.res://" + this.getContext().getPackageName()+"/raw/"+song);
+
         if(songPlaying==false){
             songPlaying = true;
             mediaPlayer.reset();
+
             if(song=="e.mp3"){
-            mediaPlayer = MediaPlayer.create(getContext(), R.raw.e);
-            }
-            else if(song=="b.mp3"){
+                pic1.setVisibility(View.VISIBLE);
+                pic1.getLayoutParams().height = 1000;
+                description.setText("The Mona Lisa; Italian: Monna Lisa or La Gioconda [la dʒoˈkonda], French: La Joconde [la ʒɔkɔ̃d]) is a half-length portrait painting by the Italian Renaissance artist Leonardo da Vinci that has been described as \"the best known, the most visited, the most written about, the most sung about, the most parodied work of art in the world.\"\n\nThe Mona Lisa is also one of the most valuable paintings in the world. It holds the Guinness World Record for the highest known insurance valuation in history at US$100 million in 1962 (equivalent to $650 million in 2018).");
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.e);
+            } else if(song=="b.mp3"){
+                pic2.setVisibility(View.VISIBLE);
+                pic2.getLayoutParams().height = 1000;
+                description.setText("The Starry Night is an oil on canvas by the Dutch post-impressionist painter Vincent van Gogh. \n\nPainted in June 1889, it describes the view from the east-facing window of his asylum room at Saint-Rémy-de-Provence, just before sunrise, with the addition of an ideal village.\nIt has been in the permanent collection of the Museum of Modern Art in New York City since 1941, acquired through the Lillie P. Bliss Bequest. Regarded as among Van Gogh's finest works. The Starry Night is one of the most recognized paintings in the history of Western culture.");
+
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
             }
             else if(song=="c.mp3"){
+                pic3.setVisibility(View.VISIBLE);
+                pic2.getLayoutParams().height = 1000;
+                description.setText("The Great Wave off Kanagawa (神奈川沖浪裏 Kanagawa-oki Nami Ura, lit. \"Under a wave off Kanagawa\"), also known as The Great Wave or simply The Wave, is a woodblock print by the Japanese ukiyo-e artist Hokusai.\n It was published sometime between 1829 and 1833 in the late Edo period as the first print in Hokusai's series Thirty-six Views of Mount Fuji. It is Hokusai's most famous work, and one of the most recognizable works of Japanese art in the world.\nThe image depicts an enormous wave threatening three boats off the coast of the town of Kanagawa (the present-day city of Yokohama, Kanagawa Prefecture) while Mount Fuji rises in the background. While sometimes assumed to be a tsunami, the wave is more likely to be a large rogue wave.[2] As in many of the prints in the series, it depicts the area around Mount Fuji under particular conditions, and the mountain itself appears in the background. Throughout the series are dramatic uses of Berlin blue pigment.");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.c);
             }
             else if(song=="d.mp3"){
+                pic4.setVisibility(View.VISIBLE);
+                pic2.getLayoutParams().height = 1000;
+                description.setText("he Creation of Adam (Italian: Creazione di Adamo) is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 3508–1512. It illustrates the Biblical creation narrative from the Book of Genesis in which God gives life to Adam, the first man. The fresco is part of a complex iconographic scheme and is chronologically the fourth in the series of panels depicting episodes from Genesis.\n" +
+                        "\n" +
+                        "The image of the near-touching hands of God and Adam has become iconic of humanity. The painting has been reproduced in countless imitations and parodies. Michelangelo's Creation of Adam is one of the most replicated religious paintings of all time.");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.d);
             }
 
@@ -432,6 +471,12 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
             mediaPlayer.setVolume(volume,volume);
 
         }
+
+        pic1.requestLayout();
+        pic2.requestLayout();
+        pic3.requestLayout();
+        pic4.requestLayout();
+        description.setVisibility(View.VISIBLE);
     }
 
     void stopSong(){
