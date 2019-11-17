@@ -247,8 +247,8 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         numSteps++;
         Log.d("asd", "yaaha"+numSteps);
             coords = distanceCalculator(quaternion_temp, 1, coords[0], coords[1]);
-            mX.setText(""+ coords[0]+" "+coords[1]);
-            mZ.setText(TEXT_NUM_STEPS + numSteps);
+//            mX.setText(""+ coords[0]+" "+coords[1]);
+//            mZ.setText(TEXT_NUM_STEPS + numSteps);
             getPos(coords[0], coords[1], baseline_myaw);
 
 
@@ -309,8 +309,8 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private void onRotationData(@NonNull final SensorValue sensorValue) {
         final Quaternion quaternion = Quaternion.multiply(sensorValue.quaternion(), TRANSLATION_Q);
 
-        mPitch.setText(formatAngle(quaternion.xRotation()));
-        mRoll.setText(formatAngle(-quaternion.yRotation()));
+//        mPitch.setText(formatAngle(quaternion.xRotation()));
+//        mRoll.setText(formatAngle(-quaternion.yRotation()));
 //        mYaw.setText(formatAngle(-quaternion.zRotation()));
         if(baseline_myaw ==-1000) {
             Log.d("As", "Pehli baar");
@@ -319,7 +319,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         }
 
         float diff = formatAngle2(-quaternion.zRotation())-baseline_myaw;
-        mYaw.setText(" "+diff);
+//        mYaw.setText(" "+diff);
         quaternion_temp = diff;
 //        if(diff>25){
 //
