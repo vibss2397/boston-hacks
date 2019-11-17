@@ -1,154 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/attitude"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textAllCaps="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/pitch"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/pitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:text="0"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/roll"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"/>
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="411dp"
+                android:layout_height="104dp"
+                android:layout_margin="0dp"
+                android:background="#F9B300"
+                android:gravity="center"
+                android:padding="0dp"
+                android:text="UNTITLED APP" />
 
-    <TextView
-        android:id="@+id/roll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:text="0"/>
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="411dp"
+                android:layout_height="50dp"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="20dp"
+                android:text="Visited Exhibits: " />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/yaw"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+            <ImageView
+                android:id="@+id/pic1"
+                android:layout_width="411dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/mona"
+                android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/yaw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView8"
-        tools:text="0"/>
+            <ImageView
+                android:id="@+id/pic2"
+                android:layout_width="411dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/starry" />
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/accelerometer"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textAllCaps="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"/>
+            <ImageView
+                android:id="@+id/pic3"
+                android:layout_width="411dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/great" />
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/x"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"/>
+            <ImageView
+                android:id="@+id/pic4"
+                android:layout_width="411dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/creation"
+                android:visibility="gone"
+                tools:ignore="OnClick" />
 
-    <TextView
-        android:id="@+id/x"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        tools:text="0"/>
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/y"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"/>
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:padding="20dp"
+                android:text="TextView" />
 
-    <TextView
-        android:id="@+id/y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
-        tools:text="0"/>
+        </LinearLayout>
+    </ScrollView>
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/z"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12"/>
-
-    <TextView
-        android:id="@+id/z"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12"
-        tools:text="0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
