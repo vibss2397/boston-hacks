@@ -239,10 +239,12 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public void step(long timeNs){
         numSteps++;
         Log.d("asd", "yaaha"+numSteps);
-        coords = distanceCalculator(quaternion_temp, 1, coords[0], coords[1]);
-        mX.setText(""+ coords[0]+" "+coords[1]);
-        mZ.setText(TEXT_NUM_STEPS + numSteps);
-        getPos(coords[0], coords[1], baseline_myaw);
+            coords = distanceCalculator(quaternion_temp, 1, coords[0], coords[1]);
+            mX.setText(""+ coords[0]+" "+coords[1]);
+            mZ.setText(TEXT_NUM_STEPS + numSteps);
+            getPos(coords[0], coords[1], baseline_myaw);
+
+
     }
 
     private void onBusy(final boolean isBusy) {
@@ -302,7 +304,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
 
         mPitch.setText(formatAngle(quaternion.xRotation()));
         mRoll.setText(formatAngle(-quaternion.yRotation()));
-        mYaw.setText(formatAngle(-quaternion.zRotation()));
+//        mYaw.setText(formatAngle(-quaternion.zRotation()));
         if(baseline_myaw ==-1000) {
             Log.d("As", "Pehli baar");
             baseline_myaw = formatAngle2(-quaternion.zRotation());
@@ -310,7 +312,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         }
 
         float diff = formatAngle2(-quaternion.zRotation())-baseline_myaw;
-        mY.setText(" "+diff);
+        mYaw.setText(" "+diff);
         quaternion_temp = diff;
 //        if(diff>25){
 //
@@ -366,15 +368,15 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         float[] rtn = new float[2];
 
         float distance = stride * steps;
-        if(yaw<0){
-            yaw += 360;
-        }
-        float n = 30f;
-        float i = 0;
-        while(i<=yaw){
-            i += n/2;
-        }
-        yaw = i;
+//        if(yaw<0){
+//            yaw += 360;
+//        }
+//        float n = 30f;
+//        float i = 0;
+//        while(i<yaw){
+//            i += n/2;
+//        }
+//        yaw = i;
 
         float x = (float) (distance * Math.cos(yaw*Math.PI/180));
         float y = (float) (distance * Math.sin(yaw*Math.PI/180));
