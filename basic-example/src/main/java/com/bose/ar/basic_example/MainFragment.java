@@ -7,7 +7,7 @@ package com.bose.ar.basic_example;
 //  Created by Tambet Ingo on 12/10/2018.
 //  Copyright © 2018 Bose Corporation. All rights reserved.
 //
-
+//, View.OnClickListener
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -40,6 +40,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import java.util.Locale;
+
+import android.widget.ImageView;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -75,6 +77,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public final float stride = 0.5f;
     public float quaternion_temp;
     public float[] coords = {0, 0};
+    private ImageView pic1, pic2, pic3, pic4;
 
     @Nullable
     private Snackbar mSnackBar;
@@ -106,8 +109,20 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
+//        img.setOnClickListener(new OnClickListener() {
+//            //something
+//        });
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
+//    @Override
+//    public void onClick(View v) {
+//        Log.d("HELLO", "WORLD");
+//        if (v.getId() == R.id.pic4) {
+//            // Launching new Activity on hitting the image
+//            Intent j = new Intent(getActivity().getApplicationContext(), MainFragment.class);
+//            startActivity(j);
+//        }
+//    }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
@@ -118,7 +133,10 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         mPitch = view.findViewById(R.id.pitch);
         mRoll = view.findViewById(R.id.roll);
         mYaw = view.findViewById(R.id.yaw);
-
+        pic1 = view.findViewById(R.id.pic1);
+        pic2 = view.findViewById(R.id.pic2);
+        pic3 = view.findViewById(R.id.pic3);
+        pic4 = view.findViewById(R.id.pic4);
         mX = view.findViewById(R.id.x);
         mY = view.findViewById(R.id.y);
         mZ = view.findViewById(R.id.z);
