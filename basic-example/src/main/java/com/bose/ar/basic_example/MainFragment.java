@@ -61,12 +61,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private View mParentView;
     @Nullable
     private ProgressBar mProgressBar;
-    private TextView mPitch;
-    private TextView mRoll;
-    private TextView mYaw;
-    private TextView mX;
-    private TextView mY;
-    private TextView mZ;
+
 
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -87,8 +82,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public float DistThreshold = 10 ;
     public float maxvol = 35;
     public boolean songPlaying = false;
-
-
+    public TextView description;
     @Nullable
     private Snackbar mSnackBar;
 
@@ -96,9 +90,6 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         public float x;
         public float y;
         public String song;
-        public float ori;
-        public int id;
-
     }
 
     @Override
@@ -169,16 +160,11 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
 
         mParentView = view.findViewById(R.id.container);
 
-        mPitch = view.findViewById(R.id.pitch);
-        mRoll = view.findViewById(R.id.roll);
-        mYaw = view.findViewById(R.id.yaw);
         pic1 = view.findViewById(R.id.pic1);
         pic2 = view.findViewById(R.id.pic2);
         pic3 = view.findViewById(R.id.pic3);
         pic4 = view.findViewById(R.id.pic4);
-        mX = view.findViewById(R.id.x);
-        mY = view.findViewById(R.id.y);
-        mZ = view.findViewById(R.id.z);
+        description = view.findViewById(R.id.description);
     }
 
     @Override
@@ -229,7 +215,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     public void onResume() {
         super.onResume();
         numSteps = 0;
-        mZ.setText(TEXT_NUM_STEPS + numSteps);
+
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
@@ -261,8 +247,6 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         numSteps++;
         Log.d("asd", "yaaha"+numSteps);
         coords = distanceCalculator(quaternion_temp, 1, coords[0], coords[1]);
-        mX.setText(""+ coords[0]+" "+coords[1]);
-        mZ.setText(TEXT_NUM_STEPS + numSteps);
         getPos(coords[0], coords[1], baseline_myaw);
     }
 
@@ -321,9 +305,6 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private void onRotationData(@NonNull final SensorValue sensorValue) {
         final Quaternion quaternion = Quaternion.multiply(sensorValue.quaternion(), TRANSLATION_Q);
 
-        mPitch.setText(formatAngle(quaternion.xRotation()));
-        mRoll.setText(formatAngle(-quaternion.yRotation()));
-        mYaw.setText(formatAngle(-quaternion.zRotation()));
         if(baseline_myaw ==-1000) {
             Log.d("As", "Pehli baar");
             baseline_myaw = formatAngle2(-quaternion.zRotation());
@@ -331,7 +312,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         }
 
         float diff = formatAngle2(-quaternion.zRotation())-baseline_myaw;
-        mY.setText(" "+diff);
+
         quaternion_temp = diff;
 //        if(diff>25){
 //
@@ -383,7 +364,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         return (float) degrees;
     }
 
-    public float[] distanceCalculator(float yaw, int steps, float x1, float y1) {
+     public float[] distanceCalculator(float yaw, int steps, float x1, float y1) {
         float[] rtn = new float[2];
 
         float distance = stride * steps;
@@ -440,23 +421,49 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
 
     void playSong(String song,float volume) {
         Uri filename = Uri.parse("android.res://" + this.getContext().getPackageName()+"/raw/"+song);
+
         if(songPlaying==false){
             songPlaying = true;
             mediaPlayer.reset();
             if(song=="a.mp3"){
                 pic1.setVisibility(View.VISIBLE);
+                pic1.setMaxHeight(250);
+                description.setText("The Mona Lisa (/ˌmoʊnə ˈliːsə/; Italian: Monna Lisa [ˈmɔnna ˈliːza] or La Gioconda [la dʒoˈkonda], French: La Joconde [la ʒɔkɔ̃d]) is a half-length portrait painting by the Italian Renaissance artist Leonardo da Vinci that has been described as \"the best known, the most visited, the most written about, the most sung about, the most parodied work of art in the world.\"[1] The Mona Lisa is also one of the most valuable paintings in the world. It holds the Guinness World Record for the highest known insurance valuation in history at US$100 million in 1962[2] (equivalent to $650 million in 2018).");
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
             }
             else if(song=="b.mp3"){
                 pic2.setVisibility(View.VISIBLE);
+                pic2.setMaxHeight(250);
+                description.setText("B");
+
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
             }
             else if(song=="c.mp3"){
                 pic3.setVisibility(View.VISIBLE);
+                pic3.setMaxHeight(250);
+                description.setText("C");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.c);
             }
             else if(song=="d.mp3"){
                 pic4.setVisibility(View.VISIBLE);
+                pic4.setMaxHeight(250);
+                description.setText("D");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.d);
             }
 
@@ -467,6 +474,12 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
             mediaPlayer.setVolume(volume,volume);
 
         }
+
+        pic1.requestLayout();
+        pic2.requestLayout();
+        pic3.requestLayout();
+        pic4.requestLayout();
+        description.setVisibility(View.VISIBLE);
     }
 
     void stopSong(){
