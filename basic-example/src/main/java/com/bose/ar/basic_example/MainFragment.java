@@ -10,7 +10,9 @@ package com.bose.ar.basic_example;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,6 +41,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -70,14 +73,27 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private int numSteps;
     private boolean flag = false;
     private float baseline_myaw = -1000;
-    private MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer;
     private int counter = 0;
     public final float stride = 0.5f;
     public float quaternion_temp;
     public float[] coords = {0, 0};
+    public locations[] locarr = new locations[4];
+    public float DistThreshold = 10 ;
+    public float maxvol = 35;
+    public boolean songPlaying = false;
 
     @Nullable
     private Snackbar mSnackBar;
+
+    public class locations {
+        public float x;
+        public float y;
+        public String song;
+        public float ori;
+        public int id;
+
+    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -96,8 +112,28 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
-        mediaPlayer = MediaPlayer.create(getContext(), R.raw.song);
-        mediaPlayer.start();
+
+        locations screen1 = new locations( );
+        screen1.x=0; screen1.y = 0; screen1.song = "a.mp3";
+
+        locations screen2 = new locations( );
+        screen2.x=30; screen2.y = 0; screen2.song = "b.mp3";
+
+        locations booth = new locations( );
+        booth.x=30; booth.y = 25; booth.song = "c.mp3";
+
+        locations pillar = new locations( );
+        pillar.x=0; pillar.y = 25 ; pillar.song = "d.mp3";
+
+        locarr[0] = screen1;
+        locarr[1] = screen2;
+        locarr[2] = booth;
+        locarr[3] = pillar;
+        mediaPlayer = new MediaPlayer();
+
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        mediaPlayer.start();
+
 
     }
 
@@ -185,8 +221,12 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            simpleStepDetector.updateAccel(
-                    event.timestamp, event.values[0], event.values[1], event.values[2]);
+            try {
+                simpleStepDetector.updateAccel(
+                        event.timestamp, event.values[0], event.values[1], event.values[2]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -196,12 +236,13 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     }
 
     @Override
-    public void step(long timeNs) {
+    public void step(long timeNs){
         numSteps++;
         Log.d("asd", "yaaha"+numSteps);
         coords = distanceCalculator(quaternion_temp, 1, coords[0], coords[1]);
         mX.setText(""+ coords[0]+" "+coords[1]);
         mZ.setText(TEXT_NUM_STEPS + numSteps);
+        getPos(coords[0], coords[1], baseline_myaw);
     }
 
     private void onBusy(final boolean isBusy) {
@@ -252,7 +293,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     private void onAccelerometerData(@NonNull final SensorValue sensorValue) {
         final Vector vector = sensorValue.vector();
 //        mX.setText(formatValue(vector.x()));
-        mY.setText(formatValue(vector.y()));
+//        mY.setText(formatValue(vector.y()));
 //        mZ.setText(formatValue(vector.z()));
     }
 
@@ -265,29 +306,35 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         if(baseline_myaw ==-1000) {
             Log.d("As", "Pehli baar");
             baseline_myaw = formatAngle2(-quaternion.zRotation());
-            mediaPlayer.pause();
+//            mediaPlayer.pause();
         }
-        else{
-            quaternion_temp = baseline_myaw-formatAngle2(-quaternion.zRotation());
-        }
-        if(formatAngle2(-quaternion.zRotation())-baseline_myaw>25){
 
-            if(flag==false) {
-                mPitch.setText("Song Should Play"+ counter);
-                counter++;
-                flag = true;
-                mediaPlayer.start();
-            }
-        }
-        else{
-            mRoll.setText("Song Shouldnt play"+counter);
-            if(flag==true){
+        float diff = formatAngle2(-quaternion.zRotation())-baseline_myaw;
+        mY.setText(" "+diff);
+        quaternion_temp = diff;
+//        if(diff>25){
+//
+//            if(flag==false) {
+//                mPitch.setText("Song Shouldnt Play" + counter);
+//                counter++;
+//                flag = true;
+//                mediaPlayer.start();
+//            }
+//        }
+//        else{
+//
+//            if(flag==true){
+//
+//                mediaPlayer.pause();
+//            }
+//            flag = false;
+//            mediaPlayer.pause();
 
-                mediaPlayer.pause();
-            }
-            flag = false;
+//            float log1 = (float)(Math.log(maxvol-(2*diff-1))/Math.log(maxvol));
+//            mRoll.setText("Song Should play"+);
+//            mediaPlayer.setVolume(30, 30);
 
-        }
+//        }
     }
 
     private void showError(final String message) {
@@ -319,6 +366,30 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         float[] rtn = new float[2];
 
         float distance = stride * steps;
+        if(-30<yaw && yaw<30){
+            yaw = 0;
+        }
+        else if(30<yaw && yaw<60){
+            yaw = 45;
+        }
+        else if(60<yaw && yaw<120){
+            yaw = 90;
+        }
+        else if(120<yaw && yaw<150){
+            yaw = 135;
+        }
+        else if(150<yaw || yaw<-150){
+            yaw = 180;
+        }
+        else if(-150<yaw && yaw<-120){
+            yaw = -135;
+        }
+        else if(-120<yaw && yaw<-60){
+            yaw = -90;
+        }
+        else if(-60<yaw && yaw<30){
+            yaw = -45;
+        }
         float x = (float) (distance * Math.cos(yaw*Math.PI/180));
         float y = (float) (distance * Math.sin(yaw*Math.PI/180));
         rtn[0] = x + x1;
@@ -328,6 +399,54 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         return rtn;
     }
 
+    void getPos(float x,float y,float yaw) {
+        int count = 0;
+        for (int i=0; i<4;i++){
+            float dist = (float)Math.sqrt((x-locarr[i].x)*(x-locarr[i].x)+(y-locarr[i].y)* (y-locarr[i].y));
+            if(dist<DistThreshold){
+                float volume = (float)(Math.pow(((DistThreshold-dist)/DistThreshold), 2)* maxvol);
+                String song = locarr[i].song;
+                playSong(song,volume);
+            }
+            else{
+                count++;
+            }
+        }
+        if(count==4){
+            stopSong();
+        }
+    }
 
+    void playSong(String song,float volume) {
+        Uri filename = Uri.parse("android.res://" + this.getContext().getPackageName()+"/raw/"+song);
+        if(songPlaying==false){
+            songPlaying = true;
+            mediaPlayer.reset();
+            if(song=="a.mp3"){
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
+            }
+            else if(song=="b.mp3"){
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
+            }
+            else if(song=="c.mp3"){
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.c);
+            }
+            else if(song=="d.mp3"){
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.d);
+            }
+
+            mediaPlayer.start();
+            mediaPlayer.setVolume(volume, volume);
+
+        }else {
+            mediaPlayer.setVolume(volume,volume);
+
+        }
+    }
+
+    void stopSong(){
+        mediaPlayer.pause();
+        songPlaying = false;
+    }
 
 }
