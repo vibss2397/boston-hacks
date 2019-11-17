@@ -444,15 +444,19 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
             songPlaying = true;
             mediaPlayer.reset();
             if(song=="a.mp3"){
-            mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
+                pic1.setVisibility(View.VISIBLE);
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
             }
             else if(song=="b.mp3"){
+                pic2.setVisibility(View.VISIBLE);
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
             }
             else if(song=="c.mp3"){
+                pic3.setVisibility(View.VISIBLE);
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.c);
             }
             else if(song=="d.mp3"){
+                pic4.setVisibility(View.VISIBLE);
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.d);
             }
 
