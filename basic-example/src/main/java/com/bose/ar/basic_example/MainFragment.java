@@ -114,7 +114,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         simpleStepDetector.registerListener(this);
 
         locations screen1 = new locations( );
-        screen1.x=0; screen1.y = 0; screen1.song = "a.mp3";
+        screen1.x=0; screen1.y = 0; screen1.song = "e.mp3";
 
         locations screen2 = new locations( );
         screen2.x=30; screen2.y = 0; screen2.song = "b.mp3";
@@ -366,30 +366,16 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         float[] rtn = new float[2];
 
         float distance = stride * steps;
-        if(-30<yaw && yaw<30){
-            yaw = 0;
+        if(yaw<0){
+            yaw += 360;
         }
-        else if(30<yaw && yaw<60){
-            yaw = 45;
+        float n = 30f;
+        float i = 0;
+        while(i<=yaw){
+            i += n/2;
         }
-        else if(60<yaw && yaw<120){
-            yaw = 90;
-        }
-        else if(120<yaw && yaw<150){
-            yaw = 135;
-        }
-        else if(150<yaw || yaw<-150){
-            yaw = 180;
-        }
-        else if(-150<yaw && yaw<-120){
-            yaw = -135;
-        }
-        else if(-120<yaw && yaw<-60){
-            yaw = -90;
-        }
-        else if(-60<yaw && yaw<30){
-            yaw = -45;
-        }
+        yaw = i;
+
         float x = (float) (distance * Math.cos(yaw*Math.PI/180));
         float y = (float) (distance * Math.sin(yaw*Math.PI/180));
         rtn[0] = x + x1;
@@ -400,6 +386,8 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     }
 
     void getPos(float x,float y,float yaw) {
+        x = Math.abs(x);
+        y = Math.abs(y);
         int count = 0;
         for (int i=0; i<4;i++){
             float dist = (float)Math.sqrt((x-locarr[i].x)*(x-locarr[i].x)+(y-locarr[i].y)* (y-locarr[i].y));
@@ -422,8 +410,8 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         if(songPlaying==false){
             songPlaying = true;
             mediaPlayer.reset();
-            if(song=="a.mp3"){
-            mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
+            if(song=="e.mp3"){
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.e);
             }
             else if(song=="b.mp3"){
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
