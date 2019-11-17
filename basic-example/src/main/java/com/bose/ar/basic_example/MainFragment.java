@@ -111,7 +111,7 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         simpleStepDetector.registerListener(this);
 
         locations screen1 = new locations( );
-        screen1.x=0; screen1.y = 0; screen1.song = "a.mp3";
+        screen1.x=0; screen1.y = 0; screen1.song = "e.mp3";
 
         locations screen2 = new locations( );
         screen2.x=30; screen2.y = 0; screen2.song = "b.mp3";
@@ -368,30 +368,16 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         float[] rtn = new float[2];
 
         float distance = stride * steps;
-        if(-30<yaw && yaw<30){
-            yaw = 0;
+        if(yaw<0){
+            yaw += 360;
         }
-        else if(30<yaw && yaw<60){
-            yaw = 45;
+        float n = 30f;
+        float i = 0;
+        while(i<=yaw){
+            i += n/2;
         }
-        else if(60<yaw && yaw<120){
-            yaw = 90;
-        }
-        else if(120<yaw && yaw<150){
-            yaw = 135;
-        }
-        else if(150<yaw || yaw<-150){
-            yaw = 180;
-        }
-        else if(-150<yaw && yaw<-120){
-            yaw = -135;
-        }
-        else if(-120<yaw && yaw<-60){
-            yaw = -90;
-        }
-        else if(-60<yaw && yaw<30){
-            yaw = -45;
-        }
+        yaw = i;
+
         float x = (float) (distance * Math.cos(yaw*Math.PI/180));
         float y = (float) (distance * Math.sin(yaw*Math.PI/180));
         rtn[0] = x + x1;
@@ -402,6 +388,8 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
     }
 
     void getPos(float x,float y,float yaw) {
+        x = Math.abs(x);
+        y = Math.abs(y);
         int count = 0;
         for (int i=0; i<4;i++){
             float dist = (float)Math.sqrt((x-locarr[i].x)*(x-locarr[i].x)+(y-locarr[i].y)* (y-locarr[i].y));
@@ -425,44 +413,46 @@ public class MainFragment extends Fragment implements SensorEventListener, StepL
         if(songPlaying==false){
             songPlaying = true;
             mediaPlayer.reset();
-            if(song=="a.mp3"){
+
+            if(song=="e.mp3"){
                 pic1.setVisibility(View.VISIBLE);
-                pic1.setMaxHeight(250);
-                description.setText("The Mona Lisa (/ˌmoʊnə ˈliːsə/; Italian: Monna Lisa [ˈmɔnna ˈliːza] or La Gioconda [la dʒoˈkonda], French: La Joconde [la ʒɔkɔ̃d]) is a half-length portrait painting by the Italian Renaissance artist Leonardo da Vinci that has been described as \"the best known, the most visited, the most written about, the most sung about, the most parodied work of art in the world.\"[1] The Mona Lisa is also one of the most valuable paintings in the world. It holds the Guinness World Record for the highest known insurance valuation in history at US$100 million in 1962[2] (equivalent to $650 million in 2018).");
-                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic1.getLayoutParams().height = 1000;
+                description.setText("The Mona Lisa; Italian: Monna Lisa or La Gioconda [la dʒoˈkonda], French: La Joconde [la ʒɔkɔ̃d]) is a half-length portrait painting by the Italian Renaissance artist Leonardo da Vinci that has been described as \"the best known, the most visited, the most written about, the most sung about, the most parodied work of art in the world.\"\n\nThe Mona Lisa is also one of the most valuable paintings in the world. It holds the Guinness World Record for the highest known insurance valuation in history at US$100 million in 1962 (equivalent to $650 million in 2018).");
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
 
-                mediaPlayer = MediaPlayer.create(getContext(), R.raw.a);
-            }
-            else if(song=="b.mp3"){
+                mediaPlayer = MediaPlayer.create(getContext(), R.raw.e);
+            } else if(song=="b.mp3"){
                 pic2.setVisibility(View.VISIBLE);
-                pic2.setMaxHeight(250);
-                description.setText("B");
+                pic2.getLayoutParams().height = 1000;
+                description.setText("The Starry Night is an oil on canvas by the Dutch post-impressionist painter Vincent van Gogh. \n\nPainted in June 1889, it describes the view from the east-facing window of his asylum room at Saint-Rémy-de-Provence, just before sunrise, with the addition of an ideal village.\nIt has been in the permanent collection of the Museum of Modern Art in New York City since 1941, acquired through the Lillie P. Bliss Bequest. Regarded as among Van Gogh's finest works. The Starry Night is one of the most recognized paintings in the history of Western culture.");
 
-                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
 
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.b);
             }
             else if(song=="c.mp3"){
                 pic3.setVisibility(View.VISIBLE);
-                pic3.setMaxHeight(250);
-                description.setText("C");
-                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic2.getLayoutParams().height = 1000;
+                description.setText("The Great Wave off Kanagawa (神奈川沖浪裏 Kanagawa-oki Nami Ura, lit. \"Under a wave off Kanagawa\"), also known as The Great Wave or simply The Wave, is a woodblock print by the Japanese ukiyo-e artist Hokusai.\n It was published sometime between 1829 and 1833 in the late Edo period as the first print in Hokusai's series Thirty-six Views of Mount Fuji. It is Hokusai's most famous work, and one of the most recognizable works of Japanese art in the world.\nThe image depicts an enormous wave threatening three boats off the coast of the town of Kanagawa (the present-day city of Yokohama, Kanagawa Prefecture) while Mount Fuji rises in the background. While sometimes assumed to be a tsunami, the wave is more likely to be a large rogue wave.[2] As in many of the prints in the series, it depicts the area around Mount Fuji under particular conditions, and the mountain itself appears in the background. Throughout the series are dramatic uses of Berlin blue pigment.");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic4.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
 
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.c);
             }
             else if(song=="d.mp3"){
                 pic4.setVisibility(View.VISIBLE);
-                pic4.setMaxHeight(250);
-                description.setText("D");
-                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
-                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 100;
+                pic2.getLayoutParams().height = 1000;
+                description.setText("he Creation of Adam (Italian: Creazione di Adamo) is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 3508–1512. It illustrates the Biblical creation narrative from the Book of Genesis in which God gives life to Adam, the first man. The fresco is part of a complex iconographic scheme and is chronologically the fourth in the series of panels depicting episodes from Genesis.\n" +
+                        "\n" +
+                        "The image of the near-touching hands of God and Adam has become iconic of humanity. The painting has been reproduced in countless imitations and parodies. Michelangelo's Creation of Adam is one of the most replicated religious paintings of all time.");
+                pic1.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic2.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
+                pic3.getLayoutParams().height = pic1.getHeight() == 0 ? 0 : 350;
 
                 mediaPlayer = MediaPlayer.create(getContext(), R.raw.d);
             }
